@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/just4you.iml" filepath="$PROJECT_DIR$/.idea/just4you.iml" />
       <module fileurl="file://$PROJECT_DIR$/just4you-backend/just4you-backend.iml" filepath="$PROJECT_DIR$/just4you-backend/just4you-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/just4you-frontend/just4you-frontend.iml" filepath="$PROJECT_DIR$/just4you-frontend/just4you-frontend.iml" />
     </modules>
   </component>
 </project>

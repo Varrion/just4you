@@ -1,0 +1,34 @@
+.flex-column-space_between {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-bar-icon {
+    color: white;
+    font-size: 1.75em
+}
+
+.title-font {
+    font-family: Algerian, serif;
+    color: darkblue;
+}
+
+.form-width {
+    width: 550px;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.login-background {
+    background-image: url("../../assets/images/backgroundImage.jpg");
+}
