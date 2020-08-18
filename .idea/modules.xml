@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/just4you.iml" filepath="$PROJECT_DIR$/.idea/just4you.iml" />
+      <module fileurl="file://$PROJECT_DIR$/just4you-backend/just4you-backend.iml" filepath="$PROJECT_DIR$/just4you-backend/just4you-backend.iml" />
+    </modules>
+  </component>
+</project>
