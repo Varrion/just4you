@@ -3,13 +3,11 @@ package com.example.just4you.model.dto;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import javax.persistence.Lob;
-
 @Data
-public class CategoryDto {
+public class CustomerLoginDto {
+    @NotNull
+    String username;
 
     @NotNull
-    String name;
-
-    String description;
+    String password;
 }

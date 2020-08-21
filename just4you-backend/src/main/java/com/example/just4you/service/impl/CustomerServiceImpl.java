@@ -3,6 +3,7 @@ package com.example.just4you.service.impl;
 import com.example.just4you.model.Customer;
 import com.example.just4you.model.ShoppingCart;
 import com.example.just4you.model.dto.CustomerDto;
+import com.example.just4you.model.dto.CustomerLoginDto;
 import com.example.just4you.repository.CustomerRepository;
 import com.example.just4you.service.CustomerService;
 import com.example.just4you.service.ShoppingCartService;
@@ -36,6 +37,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer loginCustomer(CustomerLoginDto customerLoginDto) {
+        return customerRepository.getCustomerByUsernameAndPassword(customerLoginDto.getUsername(), customerLoginDto.getPassword());
+    }
+
+    @Override
     public Customer saveCustomer(CustomerDto customerDto, MultipartFile customerPicture) throws IOException {
         Customer customer = new Customer();
 
@@ -45,12 +51,14 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(customerDto.getEmail());
         customer.setUsername(customerDto.getUsername());
         customer.setPassword(customerDto.getPassword());
-        
+
         customer.setAddress(customerDto.getAddress());
         customer.setCity(customerDto.getCity());
 
         customer.setIsSeller(customerDto.getIsSeller());
-        customer.setPicture(customerPicture.getBytes());
+        if (customerPicture != null) {
+            customer.setPicture(customerPicture.getBytes());
+        }
 
 
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -65,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Optional<Customer> optionalCustomer = getOneCustomer(username);
 
-        if (optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
 
             customer.UpdateCustomer(customerDto, Optional.of(customerPicture.getBytes()));

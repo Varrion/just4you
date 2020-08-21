@@ -33,8 +33,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Category saveCategory(CategoryDto categoryDto, MultipartFile categoryPicture) throws IOException {
         Category category = new Category();
 
-        categoryPicture.getBytes();
-        category.setCategoryPhoto(categoryPicture.getBytes());
+        if (categoryPicture != null) {
+            category.setCategoryPhoto(categoryPicture.getBytes());
+        }
         category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
 
@@ -46,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Optional<Category> optionalCategory = getOneCategory(categoryId);
 
-        if (optionalCategory.isPresent()){
+        if (optionalCategory.isPresent()) {
 
             Category editedCategory = optionalCategory.get();
             editedCategory.setName(categoryDto.getName());

@@ -31,7 +31,4 @@ public class ItemDto {
     Date saleEndDate;
 
     Integer discountPercentage;
-
-    @Lob
-    byte[] picture;
 }

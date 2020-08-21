@@ -1,21 +1,21 @@
 import Form from 'react-bootstrap/Form'
 import React, {useState} from "react";
-import axios from 'axios';
 import Button from "react-bootstrap/Button";
 import {navigate} from "@reach/router";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import {RegisterUser} from "../../services/customerService";
 
 function Register() {
 
     const initialUser = {
-        name: '',
-        surname: '',
-        email: '',
         username: '',
         password: '',
+        name: '',
+        surname: '',
         address: '',
         city: '',
+        email: '',
         isSeller: false
     }
 
@@ -40,12 +40,12 @@ function Register() {
         event.preventDefault();
 
         const formData = new FormData();
-        formData.append("userPhoto", userPhoto);
-        formData.append("userData", new Blob([JSON.stringify({...user})], {
+        formData.append("customerDto", new Blob([JSON.stringify({...user})], {
             type: "application/json"
         }));
+        formData.append("customerPicture", userPhoto);
 
-        axios.post("user", formData)
+        RegisterUser(formData)
             .then(() => {
                 navigate("/login");
                 setUserPhoto(null);

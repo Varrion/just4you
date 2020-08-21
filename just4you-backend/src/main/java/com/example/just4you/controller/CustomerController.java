@@ -3,6 +3,7 @@ package com.example.just4you.controller;
 import com.example.just4you.model.Customer;
 import com.example.just4you.model.dto.CategoryDto;
 import com.example.just4you.model.dto.CustomerDto;
+import com.example.just4you.model.dto.CustomerLoginDto;
 import com.example.just4you.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/customers")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("api/customers")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -25,24 +27,29 @@ public class CustomerController {
         return customerService.getAllCustomer();
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("{username}")
     Optional<Customer> getCustomer(@PathVariable String username) {
         return customerService.getOneCustomer(username);
     }
 
-    @PostMapping
-    Customer addCustomer(@RequestParam("customerDto") CustomerDto customerDto,
-                         @RequestParam("customerPicture") MultipartFile customerPicture) throws IOException {
-        return customerService.saveCustomer(customerDto, customerPicture);
+    @PostMapping("register")
+    Customer addCustomer(@RequestPart("customerDto") CustomerDto customerDto,
+                         @RequestPart("customerPicture") Optional<MultipartFile> customerPicture) throws IOException {
+        return customerService.saveCustomer(customerDto, customerPicture.orElse(null));
     }
 
-    @PutMapping("/{username}")
-    Customer editedCustomer(@PathVariable String username, @RequestParam("customerDto") CustomerDto customerDto,
-                            @RequestParam("customerPicture") MultipartFile customerPicture) throws IOException {
+    @PostMapping("login")
+    Customer addCustomer(@RequestBody CustomerLoginDto customerLoginDto) {
+        return customerService.loginCustomer(customerLoginDto);
+    }
+
+    @PutMapping("{username}")
+    Customer editedCustomer(@PathVariable String username, @RequestPart("customerDto") CustomerDto customerDto,
+                            @RequestPart("customerPicture") MultipartFile customerPicture) throws IOException {
         return customerService.editCustomer(customerDto, customerPicture, username);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("{username}")
     void deleteCustomer(@PathVariable String username) {
         customerService.deleteCustomer(username);
     }

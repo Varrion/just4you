@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/categories")
 public class CategoryController {
     private final CategoryService categoryService;
@@ -31,14 +32,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    Category addCategory(@RequestParam("categoryDto") CategoryDto categoryDto,
-                         @RequestParam("categoryPicture") MultipartFile categoryPicture) throws IOException {
-        return  categoryService.saveCategory(categoryDto, categoryPicture);
+    Category addCategory(@RequestPart("categoryDto") CategoryDto categoryDto,
+                         @RequestPart("categoryPicture") Optional<MultipartFile> categoryPicture) throws IOException {
+        return  categoryService.saveCategory(categoryDto, categoryPicture.orElse(null));
     }
 
     @PutMapping("/{id}")
-    Category editedCategory(@RequestParam("categoryDto") CategoryDto categoryDto,
-                            @RequestParam("categoryPicture") MultipartFile categoryPicture, @PathVariable Long id) throws IOException {
+    Category editedCategory(@RequestPart("categoryDto") CategoryDto categoryDto,
+                            @RequestPart("categoryPicture") MultipartFile categoryPicture, @PathVariable Long id) throws IOException {
         return categoryService.editCategory(categoryDto, categoryPicture, id);
     }
 

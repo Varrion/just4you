@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/items")
 public class ItemController {
     private final ItemService itemService;
@@ -36,14 +37,14 @@ public class ItemController {
     }
 
     @PostMapping
-    Item addItem(@RequestParam("itemDto") ItemDto itemDto,
-                 @RequestParam("itemPicture") MultipartFile itemPicture) throws IOException, FileUploadException {
-        return itemService.saveItem(itemDto, itemPicture);
+    Item addItem(@RequestPart("itemDto") ItemDto itemDto,
+                 @RequestPart("itemPicture") Optional<MultipartFile> itemPicture) throws IOException, FileUploadException {
+        return itemService.saveItem(itemDto, itemPicture.orElse(null));
     }
 
     @PutMapping("/{id}")
-    Item editedItem(@RequestParam("itemDto") ItemDto itemDto,
-                    @RequestParam("itemPicture") MultipartFile itemPicture, @PathVariable Long id) throws IOException {
+    Item editedItem(@RequestPart("itemDto") ItemDto itemDto,
+                    @RequestPart("itemPicture") MultipartFile itemPicture, @PathVariable Long id) throws IOException {
         return itemService.editItem(itemDto, itemPicture, id);
     }
 

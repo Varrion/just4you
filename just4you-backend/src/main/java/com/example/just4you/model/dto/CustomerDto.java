@@ -26,7 +26,4 @@ public class CustomerDto {
     String email;
 
     Boolean isSeller;
-
-    @Lob
-    byte[] picture;
 }

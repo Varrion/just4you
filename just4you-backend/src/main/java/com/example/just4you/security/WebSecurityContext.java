@@ -25,11 +25,11 @@ public class WebSecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable().cors().and()
+            .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/api/user/login").permitAll()
-                .antMatchers("/api/user/register").permitAll()
+                .antMatchers("/api/customers/login").permitAll()
+                .antMatchers("/api/customers/register").permitAll()
                 .antMatchers("/api/category/**").permitAll()
                 .antMatchers("/api/items").permitAll()
                 .anyRequest().authenticated()

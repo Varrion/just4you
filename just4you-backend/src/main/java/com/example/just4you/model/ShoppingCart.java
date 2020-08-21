@@ -19,6 +19,6 @@ public class ShoppingCart {
     @ManyToMany
     Set<Item> items;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     Customer customer;
 }

@@ -3,8 +3,8 @@ import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import {Link, navigate} from "@reach/router";
-import axios from 'axios';
 import Card from "react-bootstrap/Card";
+import {BasicAuthToken, LoginUser} from "../../services/customerService";
 
 function Login(props) {
     const [user, setUser] = useState({
@@ -16,22 +16,17 @@ function Login(props) {
         setUser({...user, [name]: event.target.value});
     };
 
-
-    const createBasicAuthToken = (username, password) => {
-        return 'Basic ' + window.btoa(username + ":" + password)
-    }
-
     const handleSubmit = event => {
         event.preventDefault();
 
-        axios.post("user/login", user)
-            .then((res) => {
+        LoginUser(user)
+            .then(res => {
                 props.setLoggedUser(res.data);
-                sessionStorage.setItem("user", createBasicAuthToken(user.username, user.password))
-                sessionStorage.setItem("instructor", res.data.isInstructor ?? false)
+                sessionStorage.setItem("user", BasicAuthToken(user.username, user.password))
+                sessionStorage.setItem("seller", res.data.isSeller ?? false)
                 navigate("/").then(() => window.location.reload());
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             })
     };
