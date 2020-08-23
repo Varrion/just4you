@@ -14,12 +14,14 @@ public class ItemDto {
 
     String description;
 
+    @NotNull
     Long categoryId;
 
     Long availableItems;
 
     Integer size;
 
+    @NotNull
     Long regularPrice;
 
     Boolean isOnSale;

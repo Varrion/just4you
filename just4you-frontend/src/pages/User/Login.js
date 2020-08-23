@@ -21,9 +21,8 @@ function Login(props) {
 
         LoginUser(user)
             .then(res => {
-                props.setLoggedUser(res.data);
-                sessionStorage.setItem("user", BasicAuthToken(user.username, user.password))
-                sessionStorage.setItem("seller", res.data.isSeller ?? false)
+                sessionStorage.setItem("credentials", BasicAuthToken(user.username, user.password))
+                sessionStorage.setItem("userData", JSON.stringify(res.data))
                 navigate("/").then(() => window.location.reload());
             })
             .catch(err => {
@@ -43,7 +42,7 @@ function Login(props) {
                                 <InputGroup.Prepend>
                                     <InputGroup.Text><i className="far fa-user"/></InputGroup.Text>
                                 </InputGroup.Prepend>
-                                <Form.Control id="inlineFormInputGroupUsername2" placeholder="Username"
+                                <Form.Control placeholder="Username"
                                               value={user.username} onChange={handleChange("username")}/>
                             </InputGroup>
                         </Form.Group>

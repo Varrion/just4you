@@ -32,3 +32,9 @@
 .login-background {
     background-image: url("../../assets/images/backgroundImage.jpg");
 }
+
+.add-category-background {
+    background-image: url("../../assets/images/addCategoryBackground.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}

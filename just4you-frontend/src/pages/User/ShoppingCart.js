@@ -3,9 +3,9 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import StripeCheckout from 'react-stripe-checkout';
 import axios from "axios";
-import {navigate} from "@reach/router";
+import {Link, navigate} from "@reach/router";
 
-function ShoppingCart() {
+function ShoppingCart(props) {
 
     const publishableStripeKey = 'pk_test_51HEC03JmKKUqwZKjrfAYNzazDtlFuGUpfVNjnrKDtB2oknB8chWBeF3LyKQN4qKFLItswEn07aL0f2qCnh9itIm800HvwQsZu';
 
@@ -96,7 +96,6 @@ function ShoppingCart() {
                     />}
 
                 </> : <div>
-                    <img src={EmptyCart} alt="empty cart"/>
                     <p>
                         Go to <Link to={"/courses"}>courses </Link>
                         to make a purchase
