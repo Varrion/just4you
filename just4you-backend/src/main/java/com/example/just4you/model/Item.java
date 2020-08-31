@@ -2,19 +2,25 @@ package com.example.just4you.model;
 
 import com.example.just4you.model.dto.ItemDto;
 import com.example.just4you.model.enums.Size;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@Data
 @AllArgsConstructor
+@Getter
+@Setter
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +31,16 @@ public class Item {
     String description;
 
     @ManyToOne
+    @JsonIgnore
     Category category;
 
     Long availableItems;
 
-    Size size;
+    @ElementCollection(targetClass = Size.class)
+    @CollectionTable(name = "item_size")
+    @Enumerated(EnumType.STRING)
+    @Fetch(value = FetchMode.SELECT)
+    Collection<Size> sizes;
 
     Long regularPrice;
 
@@ -75,7 +86,7 @@ public class Item {
         }
 
         regularPrice = itemDto.getRegularPrice();
-        Size sizeEnum = Size.getSize(itemDto.getSize());
-        size = sizeEnum;
+//        Collection<Size> sizeEnum = Size.getSize(itemDto.getSizes().);
+//        sizes = sizeEnum;
     }
 }

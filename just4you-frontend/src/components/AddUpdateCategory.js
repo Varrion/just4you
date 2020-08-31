@@ -63,7 +63,7 @@ function AddUpdateCategory(props) {
 
                 <Form.Group>
                     <Form.Label className="font-weight-bold font-italic">Photo</Form.Label>
-                    <Form.File id="formCustomerPicture" onChange={handleDrop}/>
+                    <Form.File id="formCategoryPicture" onChange={handleDrop}/>
                 </Form.Group>
 
                 <div className={"d-flex flex-column align-items-center"}>

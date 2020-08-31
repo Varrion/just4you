@@ -1,32 +1,31 @@
 import React, {useEffect, useState} from "react";
-import axios from 'axios';
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
+import {Button} from "react-bootstrap";
+import {navigate} from "@reach/router";
+import {DeactivateAccount} from "../../services/customerService";
+import UpdateProfileModal from "../../components/UpdateProfileModal";
 
 function Profile(props) {
+
     const [user, setUser] = useState(null);
+    const [userModal, setUserModal] = useState(false);
 
     useEffect(() => {
-        axios.get(`user/${props.username}`)
-            .then(res => {
-                setUser(res.data);
-                if (!res.data.isInstructor) {
-                    axios.get(`user/${props.username}/owned-courses`)
-                        .then()
-                        .catch(err => console.log(err))
-                } else {
-                    axios.get(`courses/instructor/${props.username}`)
-                        .then()
-                        .catch(err => console.log(err))
-                }
-            })
-            .catch(err => console.log(err))
-    }, [props.location.state.loggedUser, props.username])
+        if (props.loggedUser) {
+            setUser(JSON.parse(props.loggedUser));
+        }
+    }, [props.loggedUser])
+
+    const deactivateUser = username => {
+        DeactivateAccount(username)
+            .then(() => navigate("/"))
+    }
 
     return (
-        <div>
+        <>
             {user && <div className="container">
-                <h1 className={"title-font"}>User Details</h1>
+                <h1 className={"title-font text-center mt-4"}>User Details</h1>
                 <Card className={"rounded-content"}>
                     <div className="row">
                         <div className="col-md-5">
@@ -34,13 +33,13 @@ function Profile(props) {
                                       alt="user"
                                       width={380}
                                       height={500}
-                                      style={{padding: '15px'}}
+                                      style={{padding: '15px', objectFit: 'cover'}}
                                       className="rounded-content"/>
                         </div>
-
-                        <div id="userDetails" className="height-inherit col-md-7 card-vertical-line flex-center-column">
+                        <div id="userDetails" style={{position: "relative"}}
+                             className="height-inherit col-md-7 flex-center-column mt-3">
                             <h4> {user.name + " " + user.surname}</h4>
-                            {user.isInstructor && <p><Badge variant="info">Instructor</Badge></p>}
+                            {user.isSeller && <p><Badge variant="info">Seller</Badge></p>}
                             <p>
                                 <small><cite title="San Francisco, USA">Skopje, Macedonia <i
                                     className="fa fa-map-marker">
@@ -48,12 +47,20 @@ function Profile(props) {
                             </p>
                             <p><i className="fa fa-envelope-square"/> <a href={user.email}> {user.email} </a></p>
                             <p><i className="fas fa-user-tag"/> {user.username}</p>
-                            <p><i className="far fa-calendar-alt"/> June 02, 1988</p>
+                            <p><i className="fas fa-user-tag"/> {user.address}</p>
+                            <p><i className="fas fa-user-tag"/> {user.city}</p>
+                            <div className={"card-details-bottom"}>
+                                <Button className={"mr-3"} variant="warning" style={{color: "white"}}
+                                        onClick={() => setUserModal(true)}>Update Info</Button>
+                                <Button variant="danger" onClick={() => deactivateUser(user.username)}>Deactivate
+                                    Account</Button>
+                            </div>
                         </div>
                     </div>
                 </Card>
+                <UpdateProfileModal show={userModal} setShow={setUserModal} user={user}/>
             </div>}
-        </div>
+        </>
     )
 }
 

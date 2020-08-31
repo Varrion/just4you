@@ -31,7 +31,7 @@ public class WebSecurityContext extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/customers/login").permitAll()
                 .antMatchers("/api/customers/register").permitAll()
                 .antMatchers("/api/categories/**").permitAll()
-                .antMatchers("/api/items").permitAll()
+                .antMatchers("/api/items/category/{id}").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -10,6 +10,18 @@ async function AddItem(itemForm) {
     return axios.post(itemRoute, itemForm);
 }
 
+async function GetAllItemsByCategory(categoryId) {
+    return axios.get(`${itemRoute}/category/${categoryId}`);
+}
+
+async function GetItemDetails(itemId) {
+    return axios.get(`${itemRoute}/${itemId}`)
+}
+
+async function GetAvailableSizesForItem(itemId) {
+    return axios.get(`${itemRoute}/${itemId}/sizes`)
+}
+
 const Sizes = Object.freeze({
     XXS: Symbol("xxs"),
     XS: Symbol("xs"),
@@ -20,5 +32,5 @@ const Sizes = Object.freeze({
     XXL: Symbol("xxl"),
 });
 
-export {GetAllItems, AddItem, Sizes}
+export {GetAllItems, AddItem, GetAllItemsByCategory, GetItemDetails, Sizes}
 

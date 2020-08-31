@@ -3,7 +3,6 @@ package com.example.just4you.model.dto;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import javax.persistence.Lob;
 import java.sql.Date;
 
 @Data
@@ -19,8 +18,6 @@ public class ItemDto {
 
     Long availableItems;
 
-    Integer size;
-
     @NotNull
     Long regularPrice;
 
@@ -33,4 +30,6 @@ public class ItemDto {
     Date saleEndDate;
 
     Integer discountPercentage;
+
+    Integer[] sizes;
 }

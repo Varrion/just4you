@@ -11,6 +11,14 @@ async function LoginUser(user) {
     return axios.post(customerRoute + "/login", user);
 }
 
+async function DeactivateAccount(username) {
+    return axios.delete(customerRoute+`/${username}`)
+}
+
+async function UpdateProfile(username,formData) {
+    return axios.put(customerRoute+`/${username}`, formData)
+}
+
 const BasicAuthToken = (username, password) => {
     return 'Basic ' + window.btoa(username + ":" + password)
 }
@@ -29,4 +37,4 @@ const LogoutUser = (setLoggedUser) => {
         .then(() => window.location.reload())
 };
 
-export {RegisterUser, LoginUser, BasicAuthToken, GetUsername, LogoutUser}
+export {RegisterUser, LoginUser, BasicAuthToken, GetUsername, LogoutUser, DeactivateAccount, UpdateProfile}

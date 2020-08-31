@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="just4you@localhost" uuid="6250b842-55f8-4090-83d6-181f4f9900c7">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/just4you?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</jdbc-url>
+    </data-source>
+  </component>
+</project>

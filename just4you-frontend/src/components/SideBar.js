@@ -22,8 +22,7 @@ function SideBar(props) {
             style={{background: 'linear-gradient(180deg, rgba(2,0,36,1) 20%, rgba(134,145,190,1) 60%, rgba(18,126,173,1) 77%)'}}
         >
             <SideNav.Toggle onClick={() => props.setSideBarToggled(!props.sideBarToggle)}/>
-            <SideNav.Nav defaultSelected="home"
-                         style={{height: '-webkit-fill-available'}}>
+            <SideNav.Nav defaultSelected="home" style={{position:"absolute", top: 60}}>
                 <NavItem onClick={() => navigate("/")}>
                     <NavIcon>
                         <i className="fa fa-fw fa-home side-bar-icon"/>
@@ -87,7 +86,7 @@ function SideBar(props) {
                         </NavItem>
                     </> :
                     <>
-                        <NavItem onClick={() => navigate("login")}>
+                        <NavItem onClick={() => navigate("/my-profile")}>
                             <NavIcon>
                                 <i className="fas fa-user-circle side-bar-icon"/>
                             </NavIcon>
@@ -95,7 +94,7 @@ function SideBar(props) {
                                 User
                             </NavText>
                         </NavItem>
-                        <NavItem onClick={() => navigate("register")}>
+                        <NavItem onClick={() => navigate("/my-cart")}>
                             <NavIcon>
                                 <i className="fas fa-shopping-cart side-bar-icon"/>
                             </NavIcon>

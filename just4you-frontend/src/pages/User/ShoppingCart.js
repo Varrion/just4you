@@ -9,7 +9,7 @@ function ShoppingCart(props) {
 
     const publishableStripeKey = 'pk_test_51HEC03JmKKUqwZKjrfAYNzazDtlFuGUpfVNjnrKDtB2oknB8chWBeF3LyKQN4qKFLItswEn07aL0f2qCnh9itIm800HvwQsZu';
 
-    const [coursesInShoppingCart, setCoursesInShoppingCart] = useState(null);
+    const [itemsInCart, setItemsInCart] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [deleteCourse, setDeleteCourse] = useState(false);
 
@@ -32,25 +32,7 @@ function ShoppingCart(props) {
 
     useEffect(() => {
         let total = 0;
-        axios.get(`courses/cart/${props.userId}`)
-            .then(res => {
-                let data = res.data;
-                setCoursesInShoppingCart(data);
-                data.forEach(course => {
-                    total += course.price;
-                });
-                setTotalPrice(total);
-            })
-            .catch(err => console.log(err))
-        setDeleteCourse(false);
     }, [deleteCourse, props.loggedUser])
-
-    const deleteCourseFromCart = course => {
-        axios.put(`user/${props.userId}/cart`, course)
-            .then(() => {
-                setDeleteCourse(true);
-            })
-    }
 
     return (
         <div className="container containerDiv">

@@ -23,7 +23,7 @@ function Login(props) {
             .then(res => {
                 sessionStorage.setItem("credentials", BasicAuthToken(user.username, user.password))
                 sessionStorage.setItem("userData", JSON.stringify(res.data))
-                navigate("/").then(() => window.location.reload());
+                navigate(-1).then(() => window.location.reload());
             })
             .catch(err => {
                 console.log(err);

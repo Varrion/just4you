@@ -15,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -46,7 +44,20 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<Item> getOneItem(Long id) {
-        return itemRepository.findById(id);
+        Optional<Item> item = itemRepository.findById(id);
+
+        if (item.isPresent()) {
+            List<String> itemSizes = itemRepository.getAvailableSizesForItem(item.get().getId());
+            Set<Size> sizeSet = new HashSet<>();
+            for (String size : itemSizes) {
+                Size sizeEnum = Size.valueOf(size);
+                sizeSet.add(sizeEnum);
+            }
+            item.get().setSizes(sizeSet);
+            return item;
+        }
+
+        return null;
     }
 
     @Override
@@ -84,10 +95,10 @@ public class ItemServiceImpl implements ItemService {
                 item.setDiscountPercentage(itemDto.getDiscountPercentage());
                 item.setSaleStartDate(itemDto.getSaleStartDate());
                 item.setSaleEndDate(itemDto.getSaleEndDate());
-                item.setSalePrice(itemDto.getSalePrice());
+                item.setSalePrice(itemDto.getRegularPrice() - (itemDto.getRegularPrice() * itemDto.getDiscountPercentage() / 100));
             }
 
-            if (today.after(item.getSaleEndDate())) {
+            if (item.getSaleStartDate() != null && today.after(item.getSaleEndDate())) {
                 item.setIsOnSale(false);
                 item.setDiscountPercentage(0);
                 item.setSaleStartDate(null);
@@ -96,9 +107,20 @@ public class ItemServiceImpl implements ItemService {
             }
 
             item.setRegularPrice(itemDto.getRegularPrice());
-            Size sizeEnum = Size.getSize(itemDto.getSize());
-            item.setSize(sizeEnum);
+            Collection<Size> sizeSet = item.getSizes();
+            if (sizeSet == null) {
+                sizeSet = new HashSet<>();
+            }
 
+            if (itemDto.getSizes() != null) {
+
+                for (Integer key : itemDto.getSizes()) {
+                    Size sizeEnum = Size.getSize(key);
+                    sizeSet.add(sizeEnum);
+                }
+            }
+
+            item.setSizes(sizeSet);
             return itemRepository.save(item);
         } catch (FileUploadException | IOException ex) {
             throw new FileUploadException("Could not store file " + fileName + ". Please try again!", ex);

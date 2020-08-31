@@ -51,13 +51,13 @@ function App() {
                             <Login authUser={authUser} path="login"/>
                             <Register path="register"/>
                             <Items loggedUser={loggedUser} path="items"/>
-                            <ItemDetails loggedUser={loggedUser} path="items/:itemId"/>
                             <Categories loggedUser={loggedUser} path="categories"/>
                             <CategoryDetails loggedUser={loggedUser} path="categories/:categoryId"/>
+                            <PrivateRoute component={ItemDetails} path="items/:itemId"/>
                             <PrivateRoute component={AddUpdateItem} path="items/add"/>
-                            <PrivateRoute component={Profile} path="user/:username"/>
+                            <PrivateRoute component={Profile} path="my-profile"/>
                             <PrivateRoute component={AddUpdateItem} path="items/add"/>
-                            <PrivateRoute component={ShoppingCart} path="user/cart"/>
+                            <PrivateRoute component={ShoppingCart} path="my-cart"/>
                             <PrivateRoute component={AddUpdateCategory} path="categories/add"/>
                         </Router>
                     </div>

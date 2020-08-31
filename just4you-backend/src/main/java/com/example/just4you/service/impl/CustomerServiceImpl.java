@@ -76,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
 
-            customer.UpdateCustomer(customerDto, Optional.of(customerPicture.getBytes()));
+            customer.UpdateCustomer(customerDto, customerPicture);
             return customerRepository.save(customer);
         }
         return null;

@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -64,14 +66,17 @@ public class Customer implements UserDetails {
         return true;
     }
 
-    public void UpdateCustomer(CustomerDto customerDto, Optional<byte[]> pictureBytes) {
+    public void UpdateCustomer(CustomerDto customerDto, MultipartFile pictureBytes) throws IOException {
         username = customerDto.getUsername();
         password = customerDto.getPassword();
         name = customerDto.getName();
         surname = customerDto.getSurname();
         email = customerDto.getEmail();
-        picture = pictureBytes.orElse(null);
         address = customerDto.getAddress();
         city = customerDto.getCity();
+
+        if (pictureBytes != null) {
+            picture = pictureBytes.getBytes();
+        }
     }
 }

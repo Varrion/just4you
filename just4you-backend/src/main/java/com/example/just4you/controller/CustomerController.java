@@ -45,8 +45,8 @@ public class CustomerController {
 
     @PutMapping("{username}")
     Customer editedCustomer(@PathVariable String username, @RequestPart("customerDto") CustomerDto customerDto,
-                            @RequestPart("customerPicture") MultipartFile customerPicture) throws IOException {
-        return customerService.editCustomer(customerDto, customerPicture, username);
+                            @RequestPart("customerPicture") Optional<MultipartFile> customerPicture) throws IOException {
+        return customerService.editCustomer(customerDto, customerPicture.orElse(null), username);
     }
 
     @DeleteMapping("{username}")

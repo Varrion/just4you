@@ -1,5 +1,6 @@
 package com.example.just4you.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,6 @@ public class Category {
     byte[] categoryPhoto;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     Set<Item> item;
 }
