@@ -28,6 +28,11 @@ body {
     justify-content: center;
 }
 
+.flex-justify-center {
+    display: flex;
+    justify-content: center;
+}
+
 .flex-column-space_between {
     display: flex;
     flex-direction: column;

@@ -18,7 +18,7 @@ public class PaymentServiceImpl implements PaymentService {
     private String API_SECRET_KEY;
 
     @Override
-    public String createSubscription(String customerId, String plan, String coupon) {
+    public String createSubscription(String customerUsername, String plan, String coupon) {
         String id = null;
         try {
             Stripe.apiKey = API_SECRET_KEY;
@@ -29,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
             items.put("0", item);
 
             Map<String, Object> params = new HashMap<>();
-            params.put("customer", customerId);
+            params.put("customer", customerUsername);
             params.put("items", items);
 
             //add coupon if available

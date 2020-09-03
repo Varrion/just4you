@@ -43,6 +43,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<Item> getAllItemsOnSale(Boolean isOnSale) {
+        return itemRepository.findAllByIsOnSale(isOnSale);
+    }
+
+    @Override
     public Optional<Item> getOneItem(Long id) {
         Optional<Item> item = itemRepository.findById(id);
 
@@ -57,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
             return item;
         }
 
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -130,16 +135,31 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item editItem(ItemDto itemDto, MultipartFile itemPhoto, Long id) throws IOException {
 
-        Optional<Item> product = getOneItem(id);
+        Optional<Item> optionalItem = getOneItem(id);
 
-        if (product.isPresent()) {
-            Item editedItem = product.get();
+        if (optionalItem.isPresent()) {
+            Item editedItem = optionalItem.get();
 
             Category category = categoryService.getOneCategory(itemDto.getCategoryId()).orElse(null);
-            editedItem.UpdateItem(itemDto, Optional.of(itemPhoto.getBytes()), category);
+            editedItem.UpdateItem(itemDto, itemPhoto, category);
             return itemRepository.save(editedItem);
         }
         return null;
+    }
+
+    @Override
+    public void changeAvailableItems(Map<Long, Integer> itemsToChange) {
+
+        itemsToChange.forEach((key, value) -> {
+            Optional<Item> optionalItem = getOneItem(key);
+
+            if (optionalItem.isPresent()) {
+                Item item = optionalItem.get();
+                item.substractAvailableItems(value);
+
+                itemRepository.save(item);
+            }
+        });
     }
 
     @Override

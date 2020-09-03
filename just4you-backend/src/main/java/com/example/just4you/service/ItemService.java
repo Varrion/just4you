@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ItemService {
@@ -16,11 +17,15 @@ public interface ItemService {
 
     List<Item> getAllItemsInUserShoppingCart(String username);
 
+    List<Item> getAllItemsOnSale(Boolean isOnSale);
+
     Optional<Item> getOneItem(Long id);
 
     Item saveItem(ItemDto itemDto, MultipartFile itemPhoto) throws IOException, FileUploadException;
 
     Item editItem(ItemDto itemDto, MultipartFile itemPhoto, Long id) throws IOException;
+
+    void changeAvailableItems(Map<Long, Integer> itemsToChange);
 
     void deleteItem(Long id);
 }

@@ -12,11 +12,23 @@ async function LoginUser(user) {
 }
 
 async function DeactivateAccount(username) {
-    return axios.delete(customerRoute+`/${username}`)
+    return axios.delete(customerRoute + `/${username}`)
 }
 
-async function UpdateProfile(username,formData) {
-    return axios.put(customerRoute+`/${username}`, formData)
+async function UpdateProfile(username, formData) {
+    return axios.put(customerRoute + `/${username}`, formData)
+}
+
+async function UpdateShoppingCart(username, itemId) {
+    return axios.put(customerRoute + `/${username}/cart`, null, {
+        params: {
+            itemId: itemId
+        }
+    })
+}
+
+async function BuyItems(paymentInfo) {
+    return axios.post(customerRoute + "/payment", paymentInfo)
 }
 
 const BasicAuthToken = (username, password) => {
@@ -37,4 +49,15 @@ const LogoutUser = (setLoggedUser) => {
         .then(() => window.location.reload())
 };
 
-export {RegisterUser, LoginUser, BasicAuthToken, GetUsername, LogoutUser, DeactivateAccount, UpdateProfile}
+
+export {
+    RegisterUser,
+    LoginUser,
+    BasicAuthToken,
+    GetUsername,
+    LogoutUser,
+    DeactivateAccount,
+    UpdateProfile,
+    UpdateShoppingCart,
+    BuyItems
+}

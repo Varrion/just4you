@@ -1,10 +1,15 @@
 package com.example.just4you.controller;
 
 import com.example.just4you.model.Customer;
-import com.example.just4you.model.dto.CategoryDto;
+import com.example.just4you.model.ShoppingCart;
 import com.example.just4you.model.dto.CustomerDto;
 import com.example.just4you.model.dto.CustomerLoginDto;
+import com.example.just4you.model.dto.Payment;
 import com.example.just4you.service.CustomerService;
+import com.example.just4you.service.PaymentService;
+import com.example.just4you.service.ShoppingCartService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +22,13 @@ import java.util.Optional;
 @RequestMapping("api/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final ShoppingCartService shoppingCartService;
+    private final PaymentService paymentService;
 
-    public CustomerController(CustomerService shopperService) {
+    public CustomerController(CustomerService shopperService, ShoppingCartService shoppingCartService, PaymentService paymentService) {
         this.customerService = shopperService;
+        this.shoppingCartService = shoppingCartService;
+        this.paymentService = paymentService;
     }
 
     @GetMapping
@@ -52,5 +61,19 @@ public class CustomerController {
     @DeleteMapping("{username}")
     void deleteCustomer(@PathVariable String username) {
         customerService.deleteCustomer(username);
+    }
+
+    @PutMapping("{username}/cart")
+    ShoppingCart updateShoppingCart(@PathVariable String username, @RequestParam(name = "itemId") Long itemId) {
+        return shoppingCartService.editCart(username, itemId);
+    }
+
+    @PostMapping("payment")
+    public ResponseEntity<String> completePayment(@RequestBody Payment request) {
+        String chargeId = paymentService.createCharge(request);
+
+        return chargeId != null
+                ? new ResponseEntity<String>(chargeId, HttpStatus.OK)
+                : new ResponseEntity<String>("Please check your credit card informations", HttpStatus.BAD_REQUEST);
     }
 }

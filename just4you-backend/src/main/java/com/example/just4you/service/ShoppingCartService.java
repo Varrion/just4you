@@ -15,7 +15,7 @@ public interface ShoppingCartService {
 
     ShoppingCart saveCart(ShoppingCart shoppingCart);
 
-    ShoppingCart editCart(ShoppingCart shoppingCart);
+    ShoppingCart editCart(String username, Long itemId);
 
     void deleteCart(Long id);
 }

@@ -18,8 +18,25 @@ async function GetItemDetails(itemId) {
     return axios.get(`${itemRoute}/${itemId}`)
 }
 
-async function GetAvailableSizesForItem(itemId) {
-    return axios.get(`${itemRoute}/${itemId}/sizes`)
+async function GetAllItemsInShoppingCart(username) {
+    return axios.get(itemRoute + `/${username}/cart`)
+}
+
+async function SetAvailablePriceForBoughtItems(itemMap) {
+    const convMap = {};
+    itemMap.forEach((val, key) => {
+        convMap[key] = val;
+    });
+
+    return axios.put(itemRoute + "/available-items", convMap)
+}
+
+async function GetItemsOnSale(onSale) {
+    return axios.get(itemRoute, {
+        params: {
+            isOnSale: onSale
+        }
+    })
 }
 
 const Sizes = Object.freeze({
@@ -32,5 +49,14 @@ const Sizes = Object.freeze({
     XXL: Symbol("xxl"),
 });
 
-export {GetAllItems, AddItem, GetAllItemsByCategory, GetItemDetails, Sizes}
+export {
+    GetAllItems,
+    AddItem,
+    GetAllItemsByCategory,
+    GetItemDetails,
+    GetAllItemsInShoppingCart,
+    SetAvailablePriceForBoughtItems,
+    GetItemsOnSale,
+    Sizes
+}
 

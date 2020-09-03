@@ -89,8 +89,8 @@ function AddUpdateItem(props) {
                 <Form.Group controlId="formItemDescription">
                     <Form.Label className="font-weight-bold font-italic">Description</Form.Label>
                     <Form.Control value={item.description} onChange={handleChange("description")} as="textarea"
-                                  rows="3"
-                                  placeholder="Item description"/>
+                                                                                rows="3"
+                                                                                placeholder="Item description"/>
                 </Form.Group>
 
                 <Form.Group>

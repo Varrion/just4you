@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,7 +25,10 @@ public class ItemController {
     }
 
     @GetMapping()
-    List<Item> getAllItems() {
+    List<Item> getAllItems(@RequestParam(required = false) Boolean isOnSale) {
+        if (isOnSale != null) {
+            return itemService.getAllItemsOnSale(isOnSale);
+        }
         return itemService.getAllItems();
     }
 
@@ -46,8 +50,14 @@ public class ItemController {
 
     @PutMapping("/{id}")
     Item editedItem(@RequestPart("itemDto") ItemDto itemDto,
-                    @RequestPart("itemPicture") MultipartFile itemPicture, @PathVariable Long id) throws IOException {
+                    @RequestPart("itemPicture") MultipartFile itemPicture,
+                    @PathVariable Long id) throws IOException {
         return itemService.editItem(itemDto, itemPicture, id);
+    }
+
+    @PutMapping("/available-items")
+    void editedItem(@RequestBody Map<Long, Integer> quantityToChange) {
+        itemService.changeAvailableItems(quantityToChange);
     }
 
     @DeleteMapping("/{id}")

@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Optional;
@@ -58,10 +60,37 @@ public class Item {
     byte[] picture;
 
     @ManyToMany(mappedBy = "items")
+    @JsonIgnore
     Set<ShoppingCart> shoppingCarts;
 
-    public void UpdateItem(ItemDto itemDto, Optional<byte[]> itemPhoto, Category itemCategory) {
-        picture = itemPhoto.orElse(null);
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Item)) {
+            return false;
+        }
+
+        Item course = (Item) o;
+
+        return course.name.equals(name) &&
+                course.id.equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
+        return result;
+    }
+
+    public void UpdateItem(ItemDto itemDto, MultipartFile itemPhoto, Category itemCategory) throws IOException {
+
+        if (itemPhoto != null) {
+            picture = itemPhoto.getBytes();
+        }
+
         name = itemDto.getName();
         description = itemDto.getDescription();
         availableItems = itemDto.getAvailableItems();
@@ -88,5 +117,14 @@ public class Item {
         regularPrice = itemDto.getRegularPrice();
 //        Collection<Size> sizeEnum = Size.getSize(itemDto.getSizes().);
 //        sizes = sizeEnum;
+    }
+
+    public void substractAvailableItems(Integer quantityToSubstract) {
+        if (quantityToSubstract != null) {
+            availableItems -= quantityToSubstract;
+            if (availableItems < 0) {
+                availableItems = 0L;
+            }
+        }
     }
 }

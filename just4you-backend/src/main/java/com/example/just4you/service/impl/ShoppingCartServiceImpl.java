@@ -1,19 +1,24 @@
 package com.example.just4you.service.impl;
 
+import com.example.just4you.model.Item;
 import com.example.just4you.model.ShoppingCart;
 import com.example.just4you.repository.ShoppingCartRepository;
+import com.example.just4you.service.ItemService;
 import com.example.just4you.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     final private ShoppingCartRepository shoppingCartRepository;
+    final private ItemService itemService;
 
-    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository) {
+    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ItemService itemService) {
         this.shoppingCartRepository = shoppingCartRepository;
+        this.itemService = itemService;
     }
 
     @Override
@@ -37,18 +42,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCart editCart(ShoppingCart shoppingCart) {
+    public ShoppingCart editCart(String username, Long itemId) {
 
-        Optional<ShoppingCart> cart = getOneCart(shoppingCart.getId());
+        ShoppingCart cart = getByCustomerUsername(username);
+        Optional<Item> optionalItem = itemService.getOneItem(itemId);
 
-        if (cart.isPresent()) {
-            ShoppingCart editedCart = cart.get();
-            editedCart.setId(shoppingCart.getId());
-            editedCart.setItems(shoppingCart.getItems());
-            editedCart.setCustomer(shoppingCart.getCustomer());
+        if (optionalItem.isPresent()) {
+            Item item = optionalItem.get();
+            Set<Item> cartItems = cart.getItems();
 
-            return shoppingCartRepository.save(editedCart);
+            if (cartItems.contains(item)) {
+                cartItems.remove(item);
+            } else {
+                cartItems.add(item);
+            }
+
+            cart.setItems(cartItems);
+            return shoppingCartRepository.save(cart);
         }
+
         return null;
     }
 

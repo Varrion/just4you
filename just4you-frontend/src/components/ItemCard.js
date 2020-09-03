@@ -3,6 +3,7 @@ import {navigate} from "@reach/router";
 import Card from "react-bootstrap/Card";
 import GeneralPhoto from "../assets/images/generalClothing.jpg"
 import {TruncatedDescription, TruncatedTitle} from "./textComponent";
+import Badge from "react-bootstrap/Badge";
 
 function ItemCard(props) {
     return (
@@ -15,16 +16,22 @@ function ItemCard(props) {
                     : GeneralPhoto}
                 alt={"clothes"} width={325} height={325}/>
             <Card.Body>
-                <Card.Title>{TruncatedTitle(props.title)}</Card.Title>
+                <Card.Title>{TruncatedTitle(props.title)}
+                    {props.isOnSale && <Badge className={"ml-4"} variant="danger">ON SALE</Badge>}
+                </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted text-left">
                     <p>price {props.price} <i className="fas fa-euro-sign"/></p></Card.Subtitle>
                 <Card.Text className={"text-left"}>
                     {TruncatedDescription(props.description)}
                 </Card.Text>
+                {props.isOnSale && <Card.Text style={{fontStyle: "italic"}}>
+                    from {props.saleStartDate + " to " + props.saleEndDate}
+                </Card.Text>}
                 <hr width="200" align="center"/>
                 <Card.Subtitle
                     className="mb-2 text-muted text-left">{props.availableItems && props.availableItems <= 10
-                    ? <span style={{color:'red'}}>Available: Hurry up only {props.availableItems} left </span> : <span> Available: {props.availableItems}</span> }</Card.Subtitle>
+                    ? <span style={{color: 'red'}}>Available: Hurry up only {props.availableItems} left </span> :
+                    <span> Available: {props.availableItems}</span>}</Card.Subtitle>
             </Card.Body>
         </Card>
     )

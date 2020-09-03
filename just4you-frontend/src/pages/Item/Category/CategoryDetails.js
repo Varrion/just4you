@@ -16,34 +16,36 @@ function CategoryDetails(props) {
 
         GetAllItemsByCategory(props.categoryId)
             .then(res => {
-                console.log("res", res.data)
                 setItems(res.data)
             });
     }, [props.categoryId])
 
     return (
-        <div>
+        <div className={"container-fluid mt-3"}>
             {category &&
             <div>
-                <p>{category.name}</p>
-                <p>{category.description}</p>
+                <h1 className={"title-font text-center"}>{category.name}</h1>
+                <h5 className={"text-center mt-4"}>{category.description}</h5>
 
                 <div className="row m-auto">
                     {items && items.length > 0 && items.map(item =>
-                        <div className="col-md-3 mb-3" key={item.id}>
+                        <div className="col-md-3 mt-4" key={item.id}>
                             <ItemCard
                                 title={item.name}
-                                price={item.regularPrice}
+                                isOnSale={item.isOnSale}
+                                price={item.isOnSale ? item.isOnSale : item.regularPrice}
                                 id={item.id}
                                 image={item.picture}
                                 description={item.description}
                                 availableItems={item.availableItems}
+                                saleStartDate={item.saleStartDate}
+                                saleEndDate={item.saleEndDate}
                             />
                         </div>)}
                 </div>
-
-
-                <Button onClick={() => navigate("/items/add", {state: {categoryId: category.id}})}>Add Item</Button>
+                <div className={"flex-justify-center mt-4 mb-3"}>
+                    <Button style={{width:"25%"}} onClick={() => navigate("/items/add", {state: {categoryId: category.id}})}>Add Item</Button>
+                </div>
             </div>
             }
         </div>

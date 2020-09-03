@@ -4,14 +4,23 @@ import Form from "react-bootstrap/Form";
 import GeneralPhoto from "../../assets/images/generalClothing.jpg"
 import Button from "react-bootstrap/Button";
 import {Card} from "react-bootstrap";
+import {UpdateShoppingCart} from "../../services/customerService";
 
 function ItemDetails(props) {
+    const [user, setUser] = useState(JSON.parse(props.loggedUser))
     const [item, setItem] = useState(null);
+    const [addedToShoppingCart, setAddedToShoppingCart] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
 
     useEffect(() => {
         GetItemDetails(props.itemId)
             .then(res => setItem(res.data))
-    }, [])
+    }, [props.loggedUser, addedToShoppingCart])
+
+    const addToShoppingCart = itemId => {
+        UpdateShoppingCart(user.username, itemId)
+            .then(() => setAddedToShoppingCart(true))
+    }
 
     return (
         <div className={"container-fluid mt-3"}>
@@ -41,9 +50,11 @@ function ItemDetails(props) {
                                 <p style={{color: "red"}}> Sale period
                                     from {item.saleStartDate} to {item.saleEndDate}</p>
                             </div>}
-                            <p>Items left {item.availableItems}</p>
+                            <p>{item.availableItems > 0
+                                ? "Items left " + item.availableItems
+                                : <span style={{color:"red"}}>No items available !</span>}</p>
                             <span>Sizes available: </span>
-                            {item.sizes && item.sizes.length > 0 && Object.keys(Sizes).map((size, index) =>
+                            {Object.keys(Sizes).map((size, index) =>
                                 <Form.Check
                                     key={index + 1}
                                     custom
@@ -56,7 +67,10 @@ function ItemDetails(props) {
                                 />
                             )}
                             <div>
-                                <Button>Add to cart</Button>
+                                {user && !user.isSeller ?
+                                    <Button onClick={() => addToShoppingCart(item.id)}>Add to cart</Button>
+                                    : <Button onClick={() => setShowUpdateModal(true)}>Edit Item</Button>
+                                }
                             </div>
                         </div>
                     </div>
