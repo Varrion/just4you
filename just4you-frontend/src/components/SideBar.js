@@ -10,6 +10,7 @@ import {GetAllCategories} from "../services/categoryService";
 function SideBar(props) {
 
     const [categories, setCategories] = useState(null);
+    const user = props.loggedUser;
 
     useEffect(() => {
         GetAllCategories()
@@ -22,7 +23,7 @@ function SideBar(props) {
             style={{background: 'linear-gradient(180deg, rgba(2,0,36,1) 20%, rgba(134,145,190,1) 60%, rgba(18,126,173,1) 77%)'}}
         >
             <SideNav.Toggle onClick={() => props.setSideBarToggled(!props.sideBarToggle)}/>
-            <SideNav.Nav defaultSelected="home" style={{position:"absolute", top: 60}}>
+            <SideNav.Nav defaultSelected="home" style={{position: "absolute", top: 60}}>
                 <NavItem onClick={() => navigate("/")}>
                     <NavIcon>
                         <i className="fa fa-fw fa-home side-bar-icon"/>
@@ -37,7 +38,7 @@ function SideBar(props) {
                     </NavIcon>
                     <NavText>
                         Categories
-                        {props.loggedUser &&
+                        {user && user.isSeller &&
                         <OverlayTrigger
                             key={'right'}
                             placement={'right'}
@@ -66,7 +67,7 @@ function SideBar(props) {
                 </NavItem>
             </SideNav.Nav>
             <SideNav.Nav>
-                {!props.loggedUser ?
+                {!user ?
                     <>
                         <NavItem onClick={() => navigate("/login")}>
                             <NavIcon>
@@ -94,6 +95,7 @@ function SideBar(props) {
                                 User
                             </NavText>
                         </NavItem>
+                        {!user.isSeller &&
                         <NavItem onClick={() => navigate("/my-cart")}>
                             <NavIcon>
                                 <i className="fas fa-shopping-cart side-bar-icon"/>
@@ -102,6 +104,7 @@ function SideBar(props) {
                                 Shopping Cart
                             </NavText>
                         </NavItem>
+                        }
                         <NavItem onClick={() => LogoutUser(props.setLoggedUser)}>
                             <NavIcon>
                                 <i className="fas fa-sign-out-alt side-bar-icon"/>

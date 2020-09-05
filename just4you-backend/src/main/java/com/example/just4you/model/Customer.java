@@ -1,6 +1,7 @@
 package com.example.just4you.model;
 
 import com.example.just4you.model.dto.CustomerDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
@@ -40,6 +42,9 @@ public class Customer implements UserDetails {
     @Lob
     byte[] picture;
 
+    @OneToOne(mappedBy = "customer", orphanRemoval = true)
+    @JsonIgnore
+    ShoppingCart shoppingCart;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

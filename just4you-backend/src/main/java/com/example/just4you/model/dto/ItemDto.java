@@ -31,5 +31,5 @@ public class ItemDto {
 
     Integer discountPercentage;
 
-    Integer[] sizes;
+    int[] sizes;
 }

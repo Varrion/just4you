@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -60,6 +61,7 @@ public class Item {
     byte[] picture;
 
     @ManyToMany(mappedBy = "items")
+    @Cascade(value = org.hibernate.annotations.CascadeType.DELETE)
     @JsonIgnore
     Set<ShoppingCart> shoppingCarts;
 
@@ -94,7 +96,10 @@ public class Item {
         name = itemDto.getName();
         description = itemDto.getDescription();
         availableItems = itemDto.getAvailableItems();
-        category = itemCategory;
+
+        if (itemCategory != null) {
+            category = itemCategory;
+        }
 
         Date today = new Date(System.currentTimeMillis());
 
@@ -104,9 +109,11 @@ public class Item {
             saleStartDate = itemDto.getSaleStartDate();
             saleEndDate = itemDto.getSaleEndDate();
             salePrice = itemDto.getSalePrice();
+        } else {
+            isOnSale = false;
         }
 
-        if (today.after(saleEndDate)) {
+        if (saleEndDate != null && today.after(saleEndDate)) {
             isOnSale = false;
             discountPercentage = 0;
             saleStartDate = null;
@@ -115,8 +122,16 @@ public class Item {
         }
 
         regularPrice = itemDto.getRegularPrice();
-//        Collection<Size> sizeEnum = Size.getSize(itemDto.getSizes().);
-//        sizes = sizeEnum;
+
+        Collection<Size> sizeSet = new HashSet<>();
+        if (itemDto.getSizes() != null) {
+
+            for (Integer key : itemDto.getSizes()) {
+                Size sizeEnum = Size.getSize(key);
+                sizeSet.add(sizeEnum);
+            }
+        }
+        sizes = sizeSet;
     }
 
     public void substractAvailableItems(Integer quantityToSubstract) {

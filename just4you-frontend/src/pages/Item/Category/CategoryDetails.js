@@ -10,6 +10,8 @@ function CategoryDetails(props) {
     const [category, setCategory] = useState(null);
     const [items, setItems] = useState(null);
 
+    const user = props.loggedUser;
+
     useEffect(() => {
         GetCategoryDetails(props.categoryId)
             .then(res => setCategory(res.data))
@@ -43,9 +45,12 @@ function CategoryDetails(props) {
                             />
                         </div>)}
                 </div>
+                {user && user.isSeller &&
                 <div className={"flex-justify-center mt-4 mb-3"}>
-                    <Button style={{width:"25%"}} onClick={() => navigate("/items/add", {state: {categoryId: category.id}})}>Add Item</Button>
-                </div>
+                    <Button style={{width: "25%"}}
+                            onClick={() => navigate("/items/add", {state: {categoryId: category.id}})}> Add Item
+                    </Button>
+                </div>}
             </div>
             }
         </div>

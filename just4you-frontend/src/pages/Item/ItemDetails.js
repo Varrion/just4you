@@ -1,25 +1,36 @@
 import React, {useEffect, useState} from "react";
-import {GetItemDetails, Sizes} from "../../services/itemService";
+import {DeleteItemById, GetAllItemsInShoppingCart, GetItemDetails, Sizes} from "../../services/itemService";
 import Form from "react-bootstrap/Form";
 import GeneralPhoto from "../../assets/images/generalClothing.jpg"
 import Button from "react-bootstrap/Button";
 import {Card} from "react-bootstrap";
 import {UpdateShoppingCart} from "../../services/customerService";
+import ItemModal from "../../components/ItemModal";
 
 function ItemDetails(props) {
     const [user, setUser] = useState(JSON.parse(props.loggedUser))
     const [item, setItem] = useState(null);
-    const [addedToShoppingCart, setAddedToShoppingCart] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [isItemInCart, setIsItemInCart] = useState(false);
 
     useEffect(() => {
         GetItemDetails(props.itemId)
-            .then(res => setItem(res.data))
-    }, [props.loggedUser, addedToShoppingCart])
+            .then(res => {
+                const foundItem = res.data;
+                setItem(foundItem);
+                GetAllItemsInShoppingCart(user.username)
+                    .then(res => res.data.find(cartItem => cartItem.id === foundItem.id && setIsItemInCart(true)))
+            })
+    }, [props.loggedUser, showUpdateModal, isItemInCart])
 
     const addToShoppingCart = itemId => {
         UpdateShoppingCart(user.username, itemId)
-            .then(() => setAddedToShoppingCart(true))
+            .then(() => setIsItemInCart(true))
+    }
+
+    const deleteItem = itemId => {
+        DeleteItemById(itemId)
+            .then(() => window.history.back())
     }
 
     return (
@@ -40,7 +51,7 @@ function ItemDetails(props) {
                             <p>{item.description}</p>
                             <p>
                                 <span>Regular Price </span>
-                                <span className={item.isOnSale && "striked-text"}>
+                                <span className={item.isOnSale ? "striked-text" : null}>
                             {item.regularPrice} <i className="fas fa-euro-sign"/>
                         </span>
                             </p>
@@ -52,7 +63,7 @@ function ItemDetails(props) {
                             </div>}
                             <p>{item.availableItems > 0
                                 ? "Items left " + item.availableItems
-                                : <span style={{color:"red"}}>No items available !</span>}</p>
+                                : <span style={{color: "red"}}>No items available !</span>}</p>
                             <span>Sizes available: </span>
                             {Object.keys(Sizes).map((size, index) =>
                                 <Form.Check
@@ -67,14 +78,25 @@ function ItemDetails(props) {
                                 />
                             )}
                             <div>
-                                {user && !user.isSeller ?
-                                    <Button onClick={() => addToShoppingCart(item.id)}>Add to cart</Button>
-                                    : <Button onClick={() => setShowUpdateModal(true)}>Edit Item</Button>
+                                {user && !user.isSeller
+                                    ? !isItemInCart
+                                        ? <Button onClick={() => addToShoppingCart(item.id)}>Add to cart</Button>
+                                        :
+                                        <p style={{color: "green", fontStyle: "italic"}}>{item.name} is already in your
+                                            shopping cart</p>
+                                    : <div>
+                                        <Button className={"mr-4"} onClick={() => setShowUpdateModal(true)}>Edit
+                                            Item</Button>
+                                        <Button variant={"danger"} onClick={() => deleteItem(item.id)}>Delete
+                                            Item</Button>
+                                    </div>
                                 }
                             </div>
                         </div>
                     </div>
                 </Card.Body>
+
+                <ItemModal show={showUpdateModal} setShow={setShowUpdateModal} item={item}/>
             </Card>}
         </div>
     )

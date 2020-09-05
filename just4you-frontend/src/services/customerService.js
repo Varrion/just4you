@@ -46,7 +46,10 @@ const LogoutUser = (setLoggedUser) => {
     sessionStorage.removeItem("userData");
     setLoggedUser(null);
     navigate("/")
-        .then(() => window.location.reload())
+        .then(() => {
+            window.location.reload();
+            alert("logged out successfully");
+        })
 };
 
 

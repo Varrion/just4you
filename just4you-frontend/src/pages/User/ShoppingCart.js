@@ -6,6 +6,7 @@ import {GetAllItemsInShoppingCart, SetAvailablePriceForBoughtItems} from "../../
 import {BuyItems, UpdateShoppingCart} from "../../services/customerService";
 import GeneralPhoto from "../../assets/images/generalClothing.jpg";
 import EmptyShoppingCart from "../../assets/images/EmptyShoppingCart.jpg";
+import {Badge} from "react-bootstrap";
 
 function ShoppingCart(props) {
 
@@ -72,7 +73,7 @@ function ShoppingCart(props) {
                         })
                     }))
         } else {
-            console.log("validate first")
+            alert("Resolve Errors first")
         }
     }
 
@@ -142,8 +143,11 @@ function ShoppingCart(props) {
                                             ? "data:image/jpeg;base64," + item.picture
                                             : GeneralPhoto}
                                         alt={"clothes"} width={65} height={60}/>
-
                                     <span className={"ml-2"}>{item.name}</span>
+                                    {item.availableItems === 0 &&
+                                    <div className={"text-center"}>
+                                        <Badge variant={"danger"}>SOLD OUT</Badge>
+                                    </div>}
                                 </td>
                                 <td>
                                     <input type={"number"}

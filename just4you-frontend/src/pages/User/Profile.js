@@ -5,6 +5,7 @@ import {Button} from "react-bootstrap";
 import {navigate} from "@reach/router";
 import {DeactivateAccount} from "../../services/customerService";
 import UpdateProfileModal from "../../components/UpdateProfileModal";
+import DefaultPicture from '../../assets/images/anonymous-user.png';
 
 function Profile(props) {
 
@@ -19,7 +20,12 @@ function Profile(props) {
 
     const deactivateUser = username => {
         DeactivateAccount(username)
-            .then(() => navigate("/"))
+            .then(() => {
+                sessionStorage.removeItem("credentials");
+                sessionStorage.removeItem("userData");
+                navigate("/")
+                    .then(() => alert("You have deactivated your account successfully"))
+            })
     }
 
     return (
@@ -29,7 +35,7 @@ function Profile(props) {
                 <Card className={"rounded-content"}>
                     <div className="row">
                         <div className="col-md-5">
-                            <Card.Img src={user.picture ? "data:image/jpeg;base64," + user.picture : null}
+                            <Card.Img src={user.picture ? "data:image/jpeg;base64," + user.picture : DefaultPicture}
                                       alt="user"
                                       width={380}
                                       height={500}

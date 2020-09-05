@@ -10,6 +10,10 @@ async function AddItem(itemForm) {
     return axios.post(itemRoute, itemForm);
 }
 
+async function UpdateItem(itemId, itemForm) {
+    return axios.put(itemRoute + `/${itemId}`, itemForm);
+}
+
 async function GetAllItemsByCategory(categoryId) {
     return axios.get(`${itemRoute}/category/${categoryId}`);
 }
@@ -39,24 +43,31 @@ async function GetItemsOnSale(onSale) {
     })
 }
 
-const Sizes = Object.freeze({
-    XXS: Symbol("xxs"),
-    XS: Symbol("xs"),
-    S: Symbol("s"),
-    M: Symbol("m"),
-    L: Symbol("l"),
-    XL: Symbol("xl"),
-    XXL: Symbol("xxl"),
-});
+async function DeleteItemById(itemId) {
+    return axios.delete(itemRoute+ `/${itemId}`)
+}
+
+const sizesObj = {
+    XXS: 1,
+    XS: 2,
+    S: 3,
+    M: 4,
+    L: 5,
+    XL: 6,
+    XXL: 7
+}
+const Sizes = Object.freeze(sizesObj);
 
 export {
     GetAllItems,
     AddItem,
+    UpdateItem,
     GetAllItemsByCategory,
     GetItemDetails,
     GetAllItemsInShoppingCart,
     SetAvailablePriceForBoughtItems,
     GetItemsOnSale,
+    DeleteItemById,
     Sizes
 }
 

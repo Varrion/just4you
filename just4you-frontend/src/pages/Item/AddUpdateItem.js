@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {AddItem, Sizes} from "../../services/itemService";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import InputGroup from "react-bootstrap/InputGroup";
+import {navigate} from "@reach/router";
 
 
 function AddUpdateItem(props) {
@@ -18,7 +19,7 @@ function AddUpdateItem(props) {
         regularPrice: 1,
         salePrice: 0,
         categoryId: props.location.state.categoryId ? props.location.state.categoryId : null,
-        availableItems: 0,
+        availableItems: 1,
         saleStartDate: new Date(),
         saleEndDate: halfMonthFromNow,
         discountPercentage: 0,
@@ -29,9 +30,6 @@ function AddUpdateItem(props) {
     const [item, setItem] = useState(initialItem);
     const [itemPhoto, setItemPhoto] = useState(null);
     const [checkedItems, setCheckedItems] = useState(new Set());
-
-    useEffect(() => {
-    },)
 
     const handleChange = name => event => {
         if (name === "isOnSale") {
@@ -66,6 +64,7 @@ function AddUpdateItem(props) {
             setItem({...item, salePrice: item.regularPrice % item.discountPercentage})
         }
 
+
         const formData = new FormData();
         formData.append("itemDto", new Blob([JSON.stringify({...item})], {
             type: "application/json"
@@ -73,7 +72,7 @@ function AddUpdateItem(props) {
         formData.append("itemPicture", itemPhoto);
 
         AddItem(formData)
-            .then(res => console.log(res.data))
+            .then(res => navigate(`/categories/${props.location.state.categoryId}`))
     }
 
     return (
@@ -89,8 +88,8 @@ function AddUpdateItem(props) {
                 <Form.Group controlId="formItemDescription">
                     <Form.Label className="font-weight-bold font-italic">Description</Form.Label>
                     <Form.Control value={item.description} onChange={handleChange("description")} as="textarea"
-                                                                                rows="3"
-                                                                                placeholder="Item description"/>
+                                  rows="3"
+                                  placeholder="Item description"/>
                 </Form.Group>
 
                 <Form.Group>

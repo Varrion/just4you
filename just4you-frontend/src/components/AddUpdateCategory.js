@@ -11,9 +11,7 @@ function AddUpdateCategory(props) {
         description: '',
     }
 
-    console.log(props);
     const [category, setCategory] = useState(initialCategory);
-
     const [categoryPhoto, setCategoryPhoto] = useState(null);
 
     const handleChange = name => event => {

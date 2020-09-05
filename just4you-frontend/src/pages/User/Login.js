@@ -21,9 +21,13 @@ function Login(props) {
 
         LoginUser(user)
             .then(res => {
-                sessionStorage.setItem("credentials", BasicAuthToken(user.username, user.password))
-                sessionStorage.setItem("userData", JSON.stringify(res.data))
-                navigate("/").then(window.location.reload())
+                if (res.data !== "") {
+                    sessionStorage.setItem("credentials", BasicAuthToken(user.username, user.password))
+                    sessionStorage.setItem("userData", JSON.stringify(res.data))
+                    navigate("/").then(window.location.reload())
+                } else {
+                    alert("User not found");
+                }
             })
             .catch(err => {
                 console.log(err);

@@ -50,9 +50,9 @@ public class ItemController {
 
     @PutMapping("/{id}")
     Item editedItem(@RequestPart("itemDto") ItemDto itemDto,
-                    @RequestPart("itemPicture") MultipartFile itemPicture,
+                    @RequestPart("itemPicture") Optional<MultipartFile> itemPicture,
                     @PathVariable Long id) throws IOException {
-        return itemService.editItem(itemDto, itemPicture, id);
+        return itemService.editItem(itemDto, itemPicture.orElse(null), id);
     }
 
     @PutMapping("/available-items")

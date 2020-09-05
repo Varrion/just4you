@@ -10,7 +10,6 @@ import com.example.just4you.service.CategoryService;
 import com.example.just4you.service.ItemService;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -67,17 +66,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item saveItem(ItemDto itemDto, MultipartFile itemPhoto) throws FileUploadException {
-        String fileName = "";
-
-        if (itemPhoto != null) {
-            fileName = StringUtils.cleanPath(Objects.requireNonNull(itemPhoto.getOriginalFilename()));
-        }
-
         try {
-            // Check if the file's name contains invalid characters
-            if (fileName.contains("..")) {
-                throw new FileUploadException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
+
             Item item = new Item();
 
             if (itemPhoto != null) {
@@ -118,7 +108,6 @@ public class ItemServiceImpl implements ItemService {
             }
 
             if (itemDto.getSizes() != null) {
-
                 for (Integer key : itemDto.getSizes()) {
                     Size sizeEnum = Size.getSize(key);
                     sizeSet.add(sizeEnum);
@@ -127,8 +116,8 @@ public class ItemServiceImpl implements ItemService {
 
             item.setSizes(sizeSet);
             return itemRepository.save(item);
-        } catch (FileUploadException | IOException ex) {
-            throw new FileUploadException("Could not store file " + fileName + ". Please try again!", ex);
+        } catch (IOException ex) {
+            throw new FileUploadException("Could not store requested file. Please try again! ", ex);
         }
     }
 
@@ -140,8 +129,11 @@ public class ItemServiceImpl implements ItemService {
         if (optionalItem.isPresent()) {
             Item editedItem = optionalItem.get();
 
-            Category category = categoryService.getOneCategory(itemDto.getCategoryId()).orElse(null);
-            editedItem.UpdateItem(itemDto, itemPhoto, category);
+            Optional<Category> optionalCategory = Optional.empty();
+            if (itemDto.getCategoryId() != null) {
+                optionalCategory = categoryService.getOneCategory(itemDto.getCategoryId());
+            }
+            editedItem.UpdateItem(itemDto, itemPhoto, optionalCategory.orElse(null));
             return itemRepository.save(editedItem);
         }
         return null;

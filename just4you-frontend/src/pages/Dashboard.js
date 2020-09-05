@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import ControlledCarousel from "../components/ControlledCarousel";
 import {GetItemsOnSale} from "../services/itemService";
 import ItemCard from "../components/ItemCard";
+import EmptyList from "../assets/images/emptyList.png";
 
 function Dashboard() {
 
@@ -18,7 +19,7 @@ function Dashboard() {
             <ControlledCarousel/>
             <h2 className={"title-font text-center mt-3"} style={{color: "red"}}>Items on sale</h2>
             <div className={"row m-auto"}>
-                {itemsOnSale && itemsOnSale.length > 0 && itemsOnSale.map(item =>
+                {itemsOnSale && itemsOnSale.length > 0 ? itemsOnSale.map(item =>
                     <div key={item.id} className={"col-md-3 mb-4"}>
                         <ItemCard
                             title={item.name}
@@ -32,6 +33,8 @@ function Dashboard() {
                             saleEndDate={item.saleEndDate}
                         />
                     </div>)
+                    :
+                    <img src={EmptyList} alt={"empty list"} width={'100%'}/>
                 }
             </div>
         </>
